@@ -47,15 +47,35 @@ func RestoreAttrs() { escape("8") }
 // WARNING: has the side affect
 // if program already wait for input from stdin
 // info about cursor position can by broken or incorrect
-func CursorPos() (int, int) {
-	s, _ := term.MakeRaw(0)
+func CursorPos() (int, int, error) {
+	s, err := term.MakeRaw(0)
+	if err != nil {
+		return 0, 0, err
+	}
+
 	escape("[6n")
-	b, _ := bufio.NewReader(os.Stdin).ReadBytes('R')
-	term.Restore(0, s)
+
+	b, err := bufio.NewReader(os.Stdin).ReadBytes('R')
+	if err != nil {
+		return 0, 0, err
+	}
+
+	err = term.Restore(0, s)
+	if err != nil {
+		return 0, 0, err
+	}
+
 	posb := string(b[2 : len(b)-1])
 	pos := strings.Split(posb, ";")
 
-	x, _ := strconv.Atoi(pos[0])
-	y, _ := strconv.Atoi(pos[1])
-	return x, y
+	x, err := strconv.Atoi(pos[0])
+	if err != nil {
+		return 0, 0, err
+	}
+	y, err := strconv.Atoi(pos[1])
+	if err != nil {
+		return 0, 0, err
+	}
+
+	return x, y, nil
 }

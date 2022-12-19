@@ -4,6 +4,10 @@ import "fmt"
 
 // set graphics rendition attributes for terminal
 func SetGRA(gras ...string) {
+	if len(gras) == 0 {
+		return
+	}
+
 	for _, s := range gras {
 		fmt.Print(s)
 	}

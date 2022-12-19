@@ -9,10 +9,23 @@ import (
 
 // simple func to get char from terminal
 // similar to getchar() in C
-func GetChar() rune {
-	s, _ := term.MakeRaw(0)
+func GetChar() (rune, error) {
+	s, err := term.MakeRaw(0)
+	if err != nil {
+		return 0, err
+	}
+
 	in := bufio.NewReader(os.Stdin)
-	rn, _, _ := in.ReadRune()
-	term.Restore(0, s)
-	return rn
+
+	rn, _, err := in.ReadRune()
+	if err != nil {
+		return 0, err
+	}
+
+	err = term.Restore(0, s)
+	if err != nil {
+		return 0, err
+	}
+
+	return rn, nil
 }
