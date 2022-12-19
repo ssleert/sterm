@@ -17,3 +17,8 @@ func ClearScreenUp() { escape("[1J") }
 
 // clear everything on the screen
 func ClearEntireScreen() { escape("[2J") }
+
+func ClearHome() {
+	ClearEntireScreen()
+	CursorHome()
+}
