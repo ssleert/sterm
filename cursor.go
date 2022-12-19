@@ -2,7 +2,6 @@ package sterm
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -49,11 +48,10 @@ func RestoreAttrs() { escape("8") }
 // if program already wait for input from stdin
 // info about cursor position can by broken or incorrect
 func CursorPos() (int, int) {
-	fmt.Print("\033[6n")
 	s, _ := term.MakeRaw(0)
+	escape("[6n")
 	b, _ := bufio.NewReader(os.Stdin).ReadBytes('R')
 	term.Restore(0, s)
-
 	posb := string(b[2 : len(b)-1])
 	pos := strings.Split(posb, ";")
 
