@@ -1,5 +1,35 @@
 package sterm
 
+import "fmt"
+
+type XY struct {
+	X uint
+	Y uint
+}
+
+func (p XY) String() string {
+	return fmt.Sprintf(
+		"%d:%d",
+		p.X,
+		p.Y,
+	)
+}
+
+type RGB struct {
+	R uint8
+	G uint8
+	B uint8
+}
+
+func (c RGB) String() string {
+	return fmt.Sprintf(
+		"%d,%d,%d",
+		c.R,
+		c.G,
+		c.B,
+	)
+}
+
 // escape
 const Esc = "\x1b"
 

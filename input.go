@@ -11,6 +11,7 @@ import (
 // similar to getchar() in C
 func GetChar() (rune, error) {
 	s, err := term.MakeRaw(0)
+	defer term.Restore(0, s)
 	if err != nil {
 		return 0, err
 	}
@@ -18,11 +19,6 @@ func GetChar() (rune, error) {
 	in := bufio.NewReader(os.Stdin)
 
 	rn, _, err := in.ReadRune()
-	if err != nil {
-		return 0, err
-	}
-
-	err = term.Restore(0, s)
 	if err != nil {
 		return 0, err
 	}

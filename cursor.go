@@ -17,7 +17,7 @@ func CursorHome() { escape("[H") }
 func CursorNextLine() { escape("E") }
 
 // move cursor to passed position
-func CursorTo(l, c int) { escape("[%d;%dH", l, c) }
+func CursorTo(p XY) { escape("[%d;%dH", p.Y, p.X) }
 
 // move cursor up by passed amount
 func CursorUp(n int) { escape("[%dA", n) }
@@ -47,35 +47,31 @@ func RestoreAttrs() { escape("8") }
 // WARNING: has the side affect
 // if program already wait for input from stdin
 // info about cursor position can by broken or incorrect
-func CursorPos() (int, int, error) {
+func CursorPos() (XY, error) {
 	s, err := term.MakeRaw(0)
+	defer term.Restore(0, s)
 	if err != nil {
-		return 0, 0, err
+		return XY{}, err
 	}
 
 	escape("[6n")
 
 	b, err := bufio.NewReader(os.Stdin).ReadBytes('R')
 	if err != nil {
-		return 0, 0, err
-	}
-
-	err = term.Restore(0, s)
-	if err != nil {
-		return 0, 0, err
+		return XY{}, err
 	}
 
 	posb := string(b[2 : len(b)-1])
 	pos := strings.Split(posb, ";")
 
-	x, err := strconv.Atoi(pos[0])
+	x, err := strconv.ParseUint(pos[1], 10, 64)
 	if err != nil {
-		return 0, 0, err
+		return XY{}, err
 	}
-	y, err := strconv.Atoi(pos[1])
+	y, err := strconv.ParseUint(pos[0], 10, 64)
 	if err != nil {
-		return 0, 0, err
+		return XY{}, err
 	}
 
-	return x, y, nil
+	return XY{uint(x), uint(y)}, nil
 }
