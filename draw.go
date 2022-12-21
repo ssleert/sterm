@@ -44,7 +44,6 @@ func CharArea(ch rune, pos1 XY, pos2 XY) error {
 	}
 
 	if xa == 0 {
-		line = string(ch)
 		xa = 1
 	}
 	line = strings.Repeat(string(ch), xa)
