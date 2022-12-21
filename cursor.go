@@ -64,14 +64,14 @@ func CursorPos() (XY, error) {
 	posb := string(b[2 : len(b)-1])
 	pos := strings.Split(posb, ";")
 
-	x, err := strconv.ParseUint(pos[1], 10, 64)
+	x, err := strconv.Atoi(pos[1])
 	if err != nil {
 		return XY{}, err
 	}
-	y, err := strconv.ParseUint(pos[0], 10, 64)
+	y, err := strconv.Atoi(pos[0])
 	if err != nil {
 		return XY{}, err
 	}
 
-	return XY{uint(x), uint(y)}, nil
+	return XY{x, y}, nil
 }

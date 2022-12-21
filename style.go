@@ -1,6 +1,8 @@
 package sterm
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // set graphics rendition attributes for terminal
 func SetGRA(gras ...string) {

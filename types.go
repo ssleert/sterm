@@ -3,8 +3,8 @@ package sterm
 import "fmt"
 
 type XY struct {
-	X uint
-	Y uint
+	X int
+	Y int
 }
 
 func (p XY) String() string {
