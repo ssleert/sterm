@@ -7,7 +7,13 @@ type XY struct {
 	Y int
 }
 
-func (p XY) String() string {
+type RGB struct {
+	R uint8
+	G uint8
+	B uint8
+}
+
+func (p *XY) String() string {
 	return fmt.Sprintf(
 		"%d:%d",
 		p.X,
@@ -15,13 +21,7 @@ func (p XY) String() string {
 	)
 }
 
-type RGB struct {
-	R uint8
-	G uint8
-	B uint8
-}
-
-func (c RGB) String() string {
+func (c *RGB) String() string {
 	return fmt.Sprintf(
 		"%d,%d,%d",
 		c.R,

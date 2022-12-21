@@ -1,6 +1,8 @@
 package sterm
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // a simple function for easy formatting of the escape sequence
 func escape(f string, args ...any) {
