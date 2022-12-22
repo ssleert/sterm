@@ -6,47 +6,17 @@ import (
 	"strings"
 )
 
-// print some characters in defined area
+// print characters between 2 points
 func CharArea(ch rune, pos1 XY, pos2 XY) error {
-	if pos1 == pos2 {
-		return errors.New("the positions of the points are equal")
-	}
-
-	var (
-		xa   int
-		xb   int
-		st   XY
-		line string
-	)
-
-	if pos1.X <= pos2.X && pos1.Y <= pos2.Y {
-		xa = pos2.X - pos1.X
-		xb = pos2.Y - pos1.Y
-		st = pos1
-	} else if pos1.X >= pos2.X && pos1.Y >= pos2.Y {
-		xa = pos1.X - pos2.X
-		xb = pos1.Y - pos2.Y
-		st = pos2
-	} else if pos1.X >= pos2.X && pos1.Y <= pos2.Y {
-		xa = pos1.X - pos2.X
-		xb = pos2.Y - pos1.Y
-		st = XY{
-			X: pos2.X,
-			Y: pos1.Y,
-		}
-	} else if pos1.X <= pos2.X && pos1.Y >= pos2.Y {
-		xa = pos2.X - pos1.X
-		xb = pos1.Y - pos2.Y
-		st = XY{
-			X: pos1.X,
-			Y: pos2.Y,
-		}
+	xa, xb, st, err := findLH(pos1, pos2)
+	if err != nil {
+		return err
 	}
 
 	if xa == 0 {
 		xa = 1
 	}
-	line = strings.Repeat(string(ch), xa)
+	line := strings.Repeat(string(ch), xa)
 
 	CursorTo(st)
 	for i := 0; i < xb; i++ {
@@ -58,27 +28,32 @@ func CharArea(ch rune, pos1 XY, pos2 XY) error {
 	return nil
 }
 
-func ColorArea256(c uint8, pos1 XY, pos2 XY) error {
-
-	Color256Bg(c)
-	defer SetGRA(BgDefault, FgDefault)
-
-	err := CharArea(' ', pos1, pos2)
+// frame the area between 2 points
+func FrameArea(sym [6]rune, pos1, pos2 XY) error {
+	xa, xb, st, err := findLH(pos1, pos2)
 	if err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func ColorAreaRGB(c RGB, pos1 XY, pos2 XY) error {
-	ColorRGBBg(c)
-	defer SetGRA(BgDefault, FgDefault)
-
-	err := CharArea(' ', pos1, pos2)
-	if err != nil {
-		return err
+	if xa == 1 || xb == 1 {
+		return errors.New("the length and width of the area must be at least 2")
 	}
+
+	lineTop := string(sym[2]) + strings.Repeat(string(sym[1]), xa-2) + string(sym[3])
+	lineBot := string(sym[4]) + strings.Repeat(string(sym[1]), xa-2) + string(sym[5])
+
+	CursorTo(st)
+	fmt.Print(lineTop)
+	CursorLeft(xa)
+	CursorDown(1)
+	for i := 0; i < xb-2; i++ {
+		fmt.Print(string(sym[0]))
+		CursorRight(xa - 2)
+		fmt.Print(string(sym[0]))
+		CursorDown(1)
+		CursorLeft(xa)
+	}
+	fmt.Print(lineBot)
 
 	return nil
 }

@@ -30,6 +30,15 @@ func (c *RGB) String() string {
 	)
 }
 
+// chars for borders
+var (
+	RoundedBorders = [6]rune{'│', '─', '╭', '╮', '╰', '╯'}
+	SharpBorders   = [6]rune{'│', '─', '┌', '┐', '└', '┘'}
+	DoubleBorders  = [6]rune{'║', '═', '╔', '╗', '╚', '╝'}
+	AsciiBorders   = [6]rune{'|', '-', '+', '+', '+', '+'}
+	DotBorders     = [6]rune{'.', '.', '.', '.', '.', '.'}
+)
+
 // escape
 const Esc = "\x1b"
 
