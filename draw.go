@@ -57,3 +57,14 @@ func FrameArea(sym [6]rune, pos1, pos2 XY) error {
 
 	return nil
 }
+
+func ReserveArea(n int) error {
+	if n < 0 {
+		return errors.New("n value is negative")
+	}
+
+	fmt.Print(strings.Repeat("\n", n))
+	CursorUp(n)
+
+	return nil
+}

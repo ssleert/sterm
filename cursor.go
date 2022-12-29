@@ -2,6 +2,7 @@ package sterm
 
 import (
 	"bufio"
+	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -20,16 +21,40 @@ func CursorNextLine() { escape("E") }
 func CursorTo(p XY) { escape("[%d;%dH", p.Y, p.X) }
 
 // move cursor up by passed amount
-func CursorUp(n int) { escape("[%dA", n) }
+func CursorUp(n int) error {
+	if n < 0 {
+		return errors.New("n value is negative")
+	}
+	escape("[%dA", n)
+	return nil
+}
 
 // move cursor down by passed amount
-func CursorDown(n int) { escape("[%dB", n) }
+func CursorDown(n int) error {
+	if n < 0 {
+		return errors.New("n value is negative")
+	}
+	escape("[%dB", n)
+	return nil
+}
 
 // move cursor right by passed amount
-func CursorRight(n int) { escape("[%dC", n) }
+func CursorRight(n int) error {
+	if n < 0 {
+		return errors.New("n value is negative")
+	}
+	escape("[%dC", n)
+	return nil
+}
 
 // move cursor left by passed amount
-func CursorLeft(n int) { escape("[%dD", n) }
+func CursorLeft(n int) error {
+	if n < 0 {
+		return errors.New("n value is negative")
+	}
+	escape("[%dD", n)
+	return nil
+}
 
 // hide cursor
 func CursorHide() { escape("[?25l") }
@@ -73,5 +98,5 @@ func CursorPos() (XY, error) {
 		return XY{}, err
 	}
 
-	return XY{x, y}, nil
+	return XY{uint(x), uint(y)}, nil
 }

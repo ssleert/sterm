@@ -1,33 +1,14 @@
 package sterm
 
-import "fmt"
-
 type XY struct {
-	X int
-	Y int
+	X uint
+	Y uint
 }
 
 type RGB struct {
 	R uint8
 	G uint8
 	B uint8
-}
-
-func (p *XY) String() string {
-	return fmt.Sprintf(
-		"%d:%d",
-		p.X,
-		p.Y,
-	)
-}
-
-func (c *RGB) String() string {
-	return fmt.Sprintf(
-		"%d,%d,%d",
-		c.R,
-		c.G,
-		c.B,
-	)
 }
 
 // chars for borders

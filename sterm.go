@@ -21,8 +21,8 @@ func findLH(pos1, pos2 XY) (int, int, XY, error) {
 	}
 
 	var (
-		xa int
-		xb int
+		xa uint
+		xb uint
 		st XY
 	)
 
@@ -50,5 +50,5 @@ func findLH(pos1, pos2 XY) (int, int, XY, error) {
 		}
 	}
 
-	return xa, xb, st, nil
+	return int(xa), int(xb), st, nil
 }
