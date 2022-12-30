@@ -19,7 +19,7 @@ func SetGRA(gras ...string) {
 // set 256 foreground color
 func Color256Fg(c int) error {
 	if c < 0 || c > 255 {
-		return errors.New("sterm: c value is negative or greater than 255")
+		return errors.New("c value is negative or greater than 255")
 	}
 	escape("[38;5;%dm", c)
 	return nil
@@ -28,7 +28,7 @@ func Color256Fg(c int) error {
 // set 256 background color
 func Color256Bg(c int) error {
 	if c < 0 || c > 255 {
-		return errors.New("sterm: c value is negative or greater than 255")
+		return errors.New("c value is negative or greater than 255")
 	}
 	escape("[48;5;%dm", c)
 	return nil
