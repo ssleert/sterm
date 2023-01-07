@@ -67,3 +67,45 @@ func ReserveArea(n int) error {
 
 	return nil
 }
+
+func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
+	lengths := make([]int, 0, len(tbl[0]))
+	var length int
+	for i := range tbl[0] {
+		for _, e := range tbl {
+			if len(e[i]) > length {
+				length = len(e[i])
+			}
+		}
+		lengths = append(lengths, length)
+		length = 0
+	}
+
+	lengthsSum := -1
+	for _, e := range lengths {
+		lengthsSum += e + 3
+	}
+
+	lines := make([]string, 0, len(tbl)+3)
+	var lineStr string
+
+	lines = append(lines, string(sym[2])+strings.Repeat(string(sym[1]), lengthsSum)+string(sym[3]))
+	for r, line := range tbl {
+		for i, e := range line {
+			if i == 0 {
+				lineStr += string(sym[0]) + strings.Repeat(" ", lengths[i]-len(e)+1) + e + " " + string(sym[0])
+				continue
+			}
+			lineStr += strings.Repeat(" ", lengths[i]-len(e)+1) + e + " " + string(sym[0])
+		}
+		lines = append(lines, lineStr)
+		if r == 0 {
+			lineStr = string(sym[0]) + strings.Repeat(string(sym[1]), lengthsSum) + string(sym[0])
+			lines = append(lines, lineStr)
+		}
+		lineStr = ""
+	}
+	lines = append(lines, string(sym[4])+strings.Repeat(string(sym[1]), lengthsSum)+string(sym[5]))
+
+	return lines, nil
+}
