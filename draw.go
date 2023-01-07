@@ -1,7 +1,6 @@
 package sterm
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -36,7 +35,7 @@ func FrameArea(sym [6]rune, pos1, pos2 XY) error {
 	}
 
 	if xa == 1 || xb == 1 {
-		return errors.New("the length and width of the area must be at least 2")
+		return ErrLWOfAreaUnderTwo
 	}
 
 	lineTop := string(sym[2]) + strings.Repeat(string(sym[1]), xa-2) + string(sym[3])
@@ -60,7 +59,7 @@ func FrameArea(sym [6]rune, pos1, pos2 XY) error {
 
 func ReserveArea(n int) error {
 	if n < 0 {
-		return errors.New("n value is negative")
+		return ErrNegative
 	}
 
 	fmt.Print(strings.Repeat("\n", n))

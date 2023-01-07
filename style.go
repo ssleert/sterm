@@ -1,7 +1,6 @@
 package sterm
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -19,7 +18,7 @@ func SetGRA(gras ...string) {
 // set 256 foreground color
 func Color256Fg(c int) error {
 	if c < 0 || c > 255 {
-		return errors.New("c value is negative or greater than 255")
+		return ErrColorOutOfRange
 	}
 	escape("[38;5;%dm", c)
 	return nil
@@ -28,7 +27,7 @@ func Color256Fg(c int) error {
 // set 256 background color
 func Color256Bg(c int) error {
 	if c < 0 || c > 255 {
-		return errors.New("c value is negative or greater than 255")
+		return ErrColorOutOfRange
 	}
 	escape("[48;5;%dm", c)
 	return nil
@@ -36,6 +35,12 @@ func Color256Bg(c int) error {
 
 // set RGB foreground color
 func ColorRGBFg(c RGB) { escape("[38;2;%d;%d;%dm", c.R, c.G, c.B) }
+func ColorRGBFgStr(c RGB) string {
+	return fmt.Sprintf("[38;2;%d;%d;%dm", c.R, c.G, c.B)
+}
 
 // set RGB background color
-func ColorRGBBg(c RGB) { escape("[48;2;%d;%d;%dm", c.R, c.G, c.B) }
+func ColorRGB(c RGB) { escape("[48;2;%d;%d;%dm", c.R, c.G, c.B) }
+func ColorRGBBgStr(c RGB) string {
+	return fmt.Sprintf("[38;2;%d;%d;%dm", c.R, c.G, c.B)
+}

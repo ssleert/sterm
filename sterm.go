@@ -1,7 +1,6 @@
 package sterm
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -17,7 +16,7 @@ func escape(f string, args ...any) {
 // find the length and width of a rectangle by 2 points
 func findLH(pos1, pos2 XY) (int, int, XY, error) {
 	if pos1 == pos2 {
-		return 0, 0, XY{}, errors.New("the positions of the points are equal")
+		return 0, 0, XY{}, ErrPositionsEqual
 	}
 
 	var (
