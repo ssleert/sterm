@@ -69,6 +69,12 @@ func ReserveArea(n int) error {
 }
 
 func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
+	for i, e := range tbl {
+		if len(e) != len(tbl[len(tbl)-i-1]) {
+			return nil, ErrTblLineShorterThanTbl
+		}
+	}
+
 	lengths := make([]int, 0, len(tbl[0]))
 	var length int
 	for i := range tbl[0] {
@@ -87,25 +93,50 @@ func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
 	}
 
 	lines := make([]string, 0, len(tbl)+3)
-	var lineStr string
+	var lineStr strings.Builder
+	lineStr.Grow(lengthsSum*3 + 30)
 
-	lines = append(lines, string(sym[2])+strings.Repeat(string(sym[1]), lengthsSum)+string(sym[3]))
+	lineStr.WriteRune(sym[2])
+	for i := 0; i < lengthsSum; i++ {
+		lineStr.WriteRune(sym[1])
+	}
+	lineStr.WriteRune(sym[3])
+
+	lines = append(lines, lineStr.String())
+	lineStr.Reset()
+	lineStr.Grow(lengthsSum*3 + 30)
 	for r, line := range tbl {
 		for i, e := range line {
 			if i == 0 {
-				lineStr += string(sym[0]) + strings.Repeat(" ", lengths[i]-len(e)+1) + e + " " + string(sym[0])
-				continue
+				lineStr.WriteRune(sym[0])
 			}
-			lineStr += strings.Repeat(" ", lengths[i]-len(e)+1) + e + " " + string(sym[0])
+			for p := 0; p < lengths[i]-len(e)+1; p++ {
+				lineStr.WriteRune(' ')
+			}
+			lineStr.WriteString(e)
+			lineStr.WriteRune(' ')
+			lineStr.WriteRune(sym[0])
 		}
-		lines = append(lines, lineStr)
+		lines = append(lines, lineStr.String())
 		if r == 0 {
-			lineStr = string(sym[0]) + strings.Repeat(string(sym[1]), lengthsSum) + string(sym[0])
-			lines = append(lines, lineStr)
+			lineStr.Reset()
+			lineStr.Grow(lengthsSum*3 + 30)
+			lineStr.WriteRune(sym[0])
+			for i := 0; i < lengthsSum; i++ {
+				lineStr.WriteRune(sym[1])
+			}
+			lineStr.WriteRune(sym[0])
+			lines = append(lines, lineStr.String())
 		}
-		lineStr = ""
+		lineStr.Reset()
+		lineStr.Grow(lengthsSum*3 + 30)
 	}
-	lines = append(lines, string(sym[4])+strings.Repeat(string(sym[1]), lengthsSum)+string(sym[5]))
+	lineStr.WriteRune(sym[4])
+	for i := 0; i < lengthsSum; i++ {
+		lineStr.WriteRune(sym[1])
+	}
+	lineStr.WriteRune(sym[5])
+	lines = append(lines, lineStr.String())
 
 	return lines, nil
 }
