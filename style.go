@@ -1,46 +1,19 @@
 package sterm
 
-import (
-	"fmt"
-)
-
 // set graphics rendition attributes for terminal
-func SetGRA(gras ...string) {
-	if len(gras) == 0 {
-		return
+func SetGRA(gras ...string) string {
+	if len(gras) > 1 {
+		return ""
 	}
 
+	var strGras string
 	for _, s := range gras {
-		fmt.Print(s)
+		strGras += s
 	}
+	return strGras
 }
 
-// set 256 foreground color
-func Color256Fg(c int) error {
-	if c < 0 || c > 255 {
-		return ErrColorOutOfRange
-	}
-	escape("[38;5;%dm", c)
-	return nil
-}
-
-// set 256 background color
-func Color256Bg(c int) error {
-	if c < 0 || c > 255 {
-		return ErrColorOutOfRange
-	}
-	escape("[48;5;%dm", c)
-	return nil
-}
-
-// set RGB foreground color
-func ColorRGBFg(c RGB) { escape("[38;2;%d;%d;%dm", c.R, c.G, c.B) }
-func ColorRGBFgStr(c RGB) string {
-	return fmt.Sprintf("[38;2;%d;%d;%dm", c.R, c.G, c.B)
-}
-
-// set RGB background color
-func ColorRGB(c RGB) { escape("[48;2;%d;%d;%dm", c.R, c.G, c.B) }
-func ColorRGBBgStr(c RGB) string {
-	return fmt.Sprintf("[38;2;%d;%d;%dm", c.R, c.G, c.B)
-}
+func Color256Fg(c int) string       { return escape("[38;5;%dm", c) }
+func Color256Bg(c int) string       { return escape("[48;5;%dm", c) }
+func ColorRGBFg(r, g, b int) string { return escape("[38;2;%d;%d;%dm", r, g, b) }
+func ColorRGBBg(r, g, b int) string { return escape("[48;2;%d;%d;%dm", r, g, b) }

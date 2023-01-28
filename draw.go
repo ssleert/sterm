@@ -6,30 +6,27 @@ import (
 )
 
 // print characters between 2 points
-func CharArea(ch rune, pos1 XY, pos2 XY) error {
-	xa, xb, st, err := findLH(pos1, pos2)
+func CharArea(ch rune, p1x, p1y, p2x, p2y int) error {
+	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
 	if err != nil {
 		return err
 	}
 
-	if xa == 0 {
-		xa = 1
-	}
 	line := strings.Repeat(string(ch), xa)
 
-	CursorTo(st)
+	fmt.Print(CursorTo(stx, sty))
 	for i := 0; i < xb; i++ {
 		fmt.Print(line)
-		CursorDown(1)
-		CursorLeft(xa)
+		fmt.Print(CursorDown(1))
+		fmt.Print(CursorLeft(xa))
 	}
 
 	return nil
 }
 
 // frame the area between 2 points
-func FrameArea(sym [6]rune, pos1, pos2 XY) error {
-	xa, xb, st, err := findLH(pos1, pos2)
+func FrameArea(sym [6]rune, p1x, p1y, p2x, p2y int) error {
+	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
 	if err != nil {
 		return err
 	}
@@ -38,19 +35,37 @@ func FrameArea(sym [6]rune, pos1, pos2 XY) error {
 		return ErrLWOfAreaUnderTwo
 	}
 
-	lineTop := string(sym[2]) + strings.Repeat(string(sym[1]), xa-2) + string(sym[3])
-	lineBot := string(sym[4]) + strings.Repeat(string(sym[1]), xa-2) + string(sym[5])
+	var lineBuf strings.Builder
+	lineBuf.Grow(xa)
 
-	CursorTo(st)
+	lineBuf.WriteRune(sym[2])
+	for i := 0; i < xa-2; i++ {
+		lineBuf.WriteRune(sym[1])
+	}
+	lineBuf.WriteRune(sym[3])
+
+	lineTop := lineBuf.String()
+
+	lineBuf.Reset()
+	lineBuf.Grow(xa)
+	lineBuf.WriteRune(sym[4])
+	for i := 0; i < xa-2; i++ {
+		lineBuf.WriteRune(sym[1])
+	}
+	lineBuf.WriteRune(sym[5])
+
+	lineBot := lineBuf.String()
+
+	fmt.Print(CursorTo(stx, sty))
 	fmt.Print(lineTop)
-	CursorLeft(xa)
-	CursorDown(1)
+	fmt.Print(CursorLeft(xa))
+	fmt.Print(CursorDown(1))
 	for i := 0; i < xb-2; i++ {
 		fmt.Print(string(sym[0]))
-		CursorRight(xa - 2)
+		fmt.Print(CursorRight(xa - 2))
 		fmt.Print(string(sym[0]))
-		CursorDown(1)
-		CursorLeft(xa)
+		fmt.Print(CursorDown(1))
+		fmt.Print(CursorLeft(xa))
 	}
 	fmt.Print(lineBot)
 
@@ -63,8 +78,7 @@ func ReserveArea(n int) error {
 	}
 
 	fmt.Print(strings.Repeat("\n", n))
-	CursorUp(n)
-
+	fmt.Println(CursorUp(n))
 	return nil
 }
 

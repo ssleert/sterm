@@ -1,24 +1,16 @@
 package sterm
 
-// clear the line to the right of the cursor
-func ClearLineRight() { escape("[0K") }
+import "fmt"
 
-// clear the line to the left of the cursor
-func ClearLineLeft() { escape("[1K") }
+func ClearLineRight() string    { return escape("[0K") }
+func ClearLineLeft() string     { return escape("[1K") }
+func ClearEntireLine() string   { return escape("[2K") }
+func ClearScreenDown() string   { return escape("[0J") }
+func ClearScreenUp() string     { return escape("[1J") }
+func ClearEntireScreen() string { return escape("[2J") }
 
-// clear the entire line under the cursor
-func ClearEntireLine() { escape("[2K") }
-
-// clear everything below the cursor
-func ClearScreenDown() { escape("[0J") }
-
-// clear everything above the cursor
-func ClearScreenUp() { escape("[1J") }
-
-// clear everything on the screen
-func ClearEntireScreen() { escape("[2J") }
-
+// clear screen and move cursor to 1:1
 func ClearHome() {
-	ClearEntireScreen()
-	CursorHome()
+	fmt.Print(ClearEntireScreen())
+	fmt.Print(CursorHome())
 }
