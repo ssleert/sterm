@@ -5,6 +5,14 @@ import (
 	"strings"
 )
 
+// coz normal print prints from left to right
+// RevPrint prints from right to left
+func RevPrint(a ...any) {
+	s := fmt.Sprint(a...)
+	fmt.Print(CursorLeft(len(s) - 1))
+	fmt.Print(s)
+}
+
 // print characters between 2 points
 func CharArea(ch rune, p1x, p1y, p2x, p2y int) error {
 	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
