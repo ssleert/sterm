@@ -86,7 +86,7 @@ func ReserveArea(n int) error {
 	}
 
 	fmt.Print(strings.Repeat("\n", n))
-	fmt.Println(CursorUp(n))
+	fmt.Print(CursorUp(n))
 	return nil
 }
 
