@@ -1,46 +1,48 @@
 package sterm
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 // coz normal print prints from left to right
-// RevPrint prints from right to left
-func RevPrint(a ...any) {
-	s := fmt.Sprint(a...)
-	fmt.Print(CursorLeft(len(s) - 1))
-	fmt.Print(s)
+// RevPrint return string to print from right to left
+func RevPrint(v string) string {
+	var s strings.Builder
+	s.Grow(len(v) + 4 + chLen(len(v)-1))
+	s.WriteString(CursorLeft(len(v) - 1))
+	s.WriteString(v)
+	return s.String()
 }
 
 // print characters between 2 points
-func CharArea(ch rune, p1x, p1y, p2x, p2y int) error {
+func CharArea(ch rune, p1x, p1y, p2x, p2y int) (string, error) {
 	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
 	if err != nil {
-		return err
+		return "", err
 	}
+
+	var s strings.Builder
+	s.Grow(xa*xb + xb*(4+chLen(xa)))
 
 	line := strings.Repeat(string(ch), xa)
 
-	fmt.Print(CursorTo(stx, sty))
+	s.WriteString(CursorTo(stx, sty))
 	for i := 0; i < xb; i++ {
-		fmt.Print(line)
-		fmt.Print(CursorDown(1))
-		fmt.Print(CursorLeft(xa))
+		s.WriteString(line)
+		s.WriteString(CursorDown(1))
+		s.WriteString(CursorLeft(xa))
 	}
 
-	return nil
+	return s.String(), nil
 }
 
 // frame the area between 2 points
-func FrameArea(sym [6]rune, p1x, p1y, p2x, p2y int) error {
+func FrameArea(sym [6]rune, p1x, p1y, p2x, p2y int) (string, error) {
 	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if xa == 1 || xb == 1 {
-		return ErrLWOfAreaUnderTwo
+		return "", ErrLWOfAreaUnderTwo
 	}
 
 	var lineBuf strings.Builder
@@ -63,31 +65,38 @@ func FrameArea(sym [6]rune, p1x, p1y, p2x, p2y int) error {
 	lineBuf.WriteRune(sym[5])
 
 	lineBot := lineBuf.String()
+	lineBuf.Reset()
 
-	fmt.Print(CursorTo(stx, sty))
-	fmt.Print(lineTop)
-	fmt.Print(CursorLeft(xa))
-	fmt.Print(CursorDown(1))
+	var s strings.Builder
+	s.Grow(xb + xb*((4+chLen(xa-2))+(4+chLen(xa))) + xb*5 + xb*2 + chLen(
+		stx) + chLen(sty) + 5 + len(lineTop) + len(lineBot))
+
+	s.WriteString(CursorTo(stx, sty))
+	s.WriteString(lineTop)
+	s.WriteString(CursorLeft(xa))
+	s.WriteString(CursorDown(1))
 	for i := 0; i < xb-2; i++ {
-		fmt.Print(string(sym[0]))
-		fmt.Print(CursorRight(xa - 2))
-		fmt.Print(string(sym[0]))
-		fmt.Print(CursorDown(1))
-		fmt.Print(CursorLeft(xa))
+		s.WriteRune(sym[0])
+		s.WriteString(CursorRight(xa - 2))
+		s.WriteRune(sym[0])
+		s.WriteString(CursorDown(1))
+		s.WriteString(CursorLeft(xa))
 	}
-	fmt.Print(lineBot)
+	s.WriteString(lineBot)
 
-	return nil
+	return s.String(), nil
 }
 
-func ReserveArea(n int) error {
+func ReserveArea(n int) (string, error) {
 	if n < 0 {
-		return ErrNegative
+		return "", ErrNegative
 	}
 
-	fmt.Print(strings.Repeat("\n", n))
-	fmt.Print(CursorUp(n))
-	return nil
+	var s strings.Builder
+	s.Grow(n + (4 + chLen(n)))
+	s.WriteString(strings.Repeat("\n", n))
+	s.WriteString(CursorUp(n))
+	return s.String(), nil
 }
 
 func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
@@ -115,50 +124,50 @@ func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
 	}
 
 	lines := make([]string, 0, len(tbl)+3)
-	var lineStr strings.Builder
-	lineStr.Grow(lengthsSum*3 + 30)
+	var s strings.Builder
+	s.Grow(lengthsSum*4)
 
-	lineStr.WriteRune(sym[2])
+	s.WriteRune(sym[2 ] )
 	for i := 0; i < lengthsSum; i++ {
-		lineStr.WriteRune(sym[1])
+		s.WriteRune(sym[1])
 	}
-	lineStr.WriteRune(sym[3])
+	s.WriteRune(sym[3])
 
-	lines = append(lines, lineStr.String())
-	lineStr.Reset()
-	lineStr.Grow(lengthsSum*3 + 30)
+	lines = append(lines, s.String())
+	s.Reset()
+	s.Grow(lengthsSum*4)
 	for r, line := range tbl {
-		for i, e := range line {
+		for i, e := rang e  line {
 			if i == 0 {
-				lineStr.WriteRune(sym[0])
+				s.WriteRune(sym[0])
 			}
 			for p := 0; p < lengths[i]-len(e)+1; p++ {
-				lineStr.WriteRune(' ')
+				s.WriteRune(' ')
 			}
-			lineStr.WriteString(e)
-			lineStr.WriteRune(' ')
-			lineStr.WriteRune(sym[0])
+			s.WriteString(e)
+			s.WriteRune(' ')
+			s.WriteRune(sym[0])
 		}
-		lines = append(lines, lineStr.String())
+		lines = append(lines, s.String())
 		if r == 0 {
-			lineStr.Reset()
-			lineStr.Grow(lengthsSum*3 + 30)
-			lineStr.WriteRune(sym[0])
-			for i := 0; i < lengthsSum; i++ {
-				lineStr.WriteRune(sym[1])
+			s.Reset()
+			s.Grow(lengthsSum*4)
+			s.WriteRune(sym[0])
+			for i := 0; i < l e ngthsSum; i++ {
+				s.WriteRune(sym[1])
 			}
-			lineStr.WriteRune(sym[0])
-			lines = append(lines, lineStr.String())
+			s.WriteRune(sym[0])
+			lines = append(lines, s.String())
 		}
-		lineStr.Reset()
-		lineStr.Grow(lengthsSum*3 + 30)
+		s.Reset()
+		s.Grow(lengthsSum*4)
 	}
-	lineStr.WriteRune(sym[4])
+	s.WriteRune(sym[4] )
 	for i := 0; i < lengthsSum; i++ {
-		lineStr.WriteRune(sym[1])
+		s.WriteRune(sym[1])
 	}
-	lineStr.WriteRune(sym[5])
-	lines = append(lines, lineStr.String())
+	s.WriteRune(sym[5])
+	lines = append(lines, s.String())
 
 	return lines, nil
 }

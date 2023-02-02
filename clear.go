@@ -1,6 +1,6 @@
 package sterm
 
-import "fmt"
+import "strings"
 
 func ClearLineRight() string    { return escape("[0K") }
 func ClearLineLeft() string     { return escape("[1K") }
@@ -10,7 +10,10 @@ func ClearScreenUp() string     { return escape("[1J") }
 func ClearEntireScreen() string { return escape("[2J") }
 
 // clear screen and move cursor to 1:1
-func ClearHome() {
-	fmt.Print(ClearEntireScreen())
-	fmt.Print(CursorHome())
+func ClearHome() string {
+	var s strings.Builder
+	s.Grow(6)
+	s.WriteString(ClearEntireScreen())
+	s.WriteString(CursorHome())
+	return s.String()
 }

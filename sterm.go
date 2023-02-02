@@ -14,6 +14,19 @@ func escape(f string, args ...any) string {
 	)
 }
 
+// get integer len in characters
+func chLen(a int) int {
+	switch {
+	case a > 999999: return 7
+	case a > 99999:  return 6
+	case a > 9999:   return 5
+	case a > 999:    return 4
+	case a > 99:     return 3
+	case a > 9:      return 2
+	default:         return 1
+	}
+}
+
 // find the length and width of a rectangle by 2 points
 func findLH(p1x, p1y, p2x, p2y int) (int, int, int, int, error) {
 	if p1x+p1y == p2x+p2y {
@@ -26,8 +39,8 @@ func findLH(p1x, p1y, p2x, p2y int) (int, int, int, int, error) {
 		st [2]int
 	)
 
-	xa = int(math.Abs(float64(p1x - p2x))) + 1
-	xb = int(math.Abs(float64(p1y - p2y))) + 1
+	xa = int(math.Abs(float64(p1x-p2x))) + 1
+	xb = int(math.Abs(float64(p1y-p2y))) + 1
 
 	if p1x <= p2x && p1y <= p2y {
 		st = [2]int{p1x, p1y}
