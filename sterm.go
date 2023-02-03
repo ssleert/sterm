@@ -2,7 +2,7 @@ package sterm
 
 import (
 	"fmt"
-	"math"
+	"github.com/ssleert/sfolib"
 )
 
 // a simple function for easy formatting of the escape sequence
@@ -46,8 +46,8 @@ func findLH(p1x, p1y, p2x, p2y int) (int, int, int, int, error) {
 		st [2]int
 	)
 
-	xa = int(math.Abs(float64(p1x-p2x))) + 1
-	xb = int(math.Abs(float64(p1y-p2y))) + 1
+	xa = sfolib.Abs(p1x-p2x) + 1
+	xb = sfolib.Abs(p1y-p2y) + 1
 
 	if p1x <= p2x && p1y <= p2y {
 		st = [2]int{p1x, p1y}
