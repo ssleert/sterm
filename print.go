@@ -1,6 +1,9 @@
 package sterm
 
-import "strings"
+import (
+	"github.com/ssleert/sfolib"
+	"strings"
+)
 
 // coz normal print prints from left to right
 // RevPrint return string to print from right to left
@@ -87,16 +90,13 @@ func FrameArea(sym [6]rune, p1x, p1y, p2x, p2y int) (string, error) {
 	return s.String(), nil
 }
 
-func ReserveArea(n int) (string, error) {
-	if n < 0 {
-		return "", ErrNegative
-	}
-
+func ReserveArea(n int) string {
 	var s strings.Builder
+	n = sfolib.Abs(n)
 	s.Grow(n + (4 + chLen(n)))
 	s.WriteString(strings.Repeat("\n", n))
 	s.WriteString(CursorUp(n))
-	return s.String(), nil
+	return s.String()
 }
 
 func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
@@ -125,9 +125,9 @@ func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
 
 	lines := make([]string, 0, len(tbl)+3)
 	var s strings.Builder
-	s.Grow(lengthsSum*4)
+	s.Grow(lengthsSum * 4)
 
-	s.WriteRune(sym[2 ] )
+	s.WriteRune(sym[2])
 	for i := 0; i < lengthsSum; i++ {
 		s.WriteRune(sym[1])
 	}
@@ -135,9 +135,9 @@ func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
 
 	lines = append(lines, s.String())
 	s.Reset()
-	s.Grow(lengthsSum*4)
+	s.Grow(lengthsSum * 4)
 	for r, line := range tbl {
-		for i, e := rang e  line {
+		for i, e := range line {
 			if i == 0 {
 				s.WriteRune(sym[0])
 			}
@@ -151,18 +151,18 @@ func DrawTable(tbl [][]string, sym [6]rune) ([]string, error) {
 		lines = append(lines, s.String())
 		if r == 0 {
 			s.Reset()
-			s.Grow(lengthsSum*4)
+			s.Grow(lengthsSum * 4)
 			s.WriteRune(sym[0])
-			for i := 0; i < l e ngthsSum; i++ {
+			for i := 0; i < lengthsSum; i++ {
 				s.WriteRune(sym[1])
 			}
 			s.WriteRune(sym[0])
 			lines = append(lines, s.String())
 		}
 		s.Reset()
-		s.Grow(lengthsSum*4)
+		s.Grow(lengthsSum * 4)
 	}
-	s.WriteRune(sym[4] )
+	s.WriteRune(sym[4])
 	for i := 0; i < lengthsSum; i++ {
 		s.WriteRune(sym[1])
 	}

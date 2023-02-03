@@ -17,13 +17,20 @@ func escape(f string, args ...any) string {
 // get integer len in characters
 func chLen(a int) int {
 	switch {
-	case a > 999999: return 7
-	case a > 99999:  return 6
-	case a > 9999:   return 5
-	case a > 999:    return 4
-	case a > 99:     return 3
-	case a > 9:      return 2
-	default:         return 1
+	case a > 999999:
+		return 7
+	case a > 99999:
+		return 6
+	case a > 9999:
+		return 5
+	case a > 999:
+		return 4
+	case a > 99:
+		return 3
+	case a > 9:
+		return 2
+	default:
+		return 1
 	}
 }
 
