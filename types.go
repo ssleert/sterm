@@ -1,12 +1,14 @@
 package sterm
 
+type Borders [11]rune
+
 // chars for borders
 var (
-	RoundedBorders = [8]rune{'│', '─', '╭', '╮', '╰', '╯', '├', '┤'}
-	SharpBorders   = [8]rune{'│', '─', '┌', '┐', '└', '┘', '├', '┤'}
-	DoubleBorders  = [8]rune{'║', '═', '╔', '╗', '╚', '╝', '╠', '╣'}
-	AsciiBorders   = [8]rune{'|', '-', '+', '+', '+', '+', '+', '+'}
-	DotBorders     = [8]rune{'.', '.', '.', '.', '.', '.', '.', '.'}
+	RoundedBorders = Borders{'│', '─', '╭', '╮', '╰', '╯', '├', '┤', '┬', '┴', '┼'}
+	SharpBorders   = Borders{'│', '─', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼'}
+	DoubleBorders  = Borders{'║', '═', '╔', '╗', '╚', '╝', '╠', '╣', '╦', '╩', '╬'}
+	AsciiBorders   = Borders{'|', '-', '+', '+', '+', '+', '+', '+', '+', '+', '+'}
+	DotBorders     = Borders{'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'}
 )
 
 // escape

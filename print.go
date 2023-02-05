@@ -38,7 +38,7 @@ func CharArea(ch rune, p1x, p1y, p2x, p2y int) (string, error) {
 }
 
 // frame the area between 2 points
-func FrameArea(sym [8]rune, p1x, p1y, p2x, p2y int) (string, error) {
+func FrameArea(sym Borders, p1x, p1y, p2x, p2y int) (string, error) {
 	xa, xb, stx, sty, err := findLH(p1x, p1y, p2x, p2y)
 	if err != nil {
 		return "", err
@@ -99,7 +99,7 @@ func ReserveArea(n int) string {
 	return s.String()
 }
 
-func DrawTable(tbl [][]string, sym [8]rune) ([]string, error) {
+func DrawTable(tbl [][]string, sym Borders) ([]string, error) {
 	for i, e := range tbl {
 		if len(e) != len(tbl[len(tbl)-i-1]) {
 			return nil, ErrTblLineShorterThanTbl
