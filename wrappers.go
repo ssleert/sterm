@@ -4,11 +4,17 @@ import (
 	"golang.org/x/term"
 )
 
-// simple wrapper for term.GetSize()
-// to remove unused imports)
-// all docs https://pkg.go.dev/golang.org/x/crypto/ssh/terminal#GetSize
-func Size() (int, int, error) {
-	x, y, err := term.GetSize(0)
-	return x, y, err
+func Size() (x, y int, err error) {
+	x, y, err = term.GetSize(0)
+	return
 }
 
+func GetState() (s *term.State, err error) {
+	s, err = term.GetState(0)
+	return
+}
+
+func Restore(s *term.State) (err error) {
+	err = term.Restore(9, s)
+	return
+}
