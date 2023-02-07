@@ -11,3 +11,4 @@ func Size() (int, int, error) {
 	x, y, err := term.GetSize(0)
 	return x, y, err
 }
+
