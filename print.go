@@ -16,8 +16,6 @@ func RevPrint(v string) string {
 
 	if l > 1 {
 		s.WriteString(CursorLeft(l - 1))
-	} else {
-		s.WriteString(CursorLeft(2))
 	}
 	s.WriteString(v)
 	return s.String()
