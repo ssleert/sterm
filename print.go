@@ -8,13 +8,16 @@ import (
 // coz normal print prints from left to right
 // RevPrint return string to print from right to left
 func RevPrint(v string) string {
-	var s strings.Builder
-	s.Grow(len(v) + 4 + chLen(len(v)-1))
+	var (
+		s strings.Builder
+		l = len(v)
+	)
+	s.Grow(l + 4 + chLen(l-1))
 
-	if len(v) > 1 {
-		s.WriteString(CursorLeft(len(v) - 1))
+	if l > 1 {
+		s.WriteString(CursorLeft(l - 1))
 	} else {
-		s.WriteString(CursorLeft(1))
+		s.WriteString(CursorLeft(2))
 	}
 	s.WriteString(v)
 	return s.String()
