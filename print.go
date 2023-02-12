@@ -10,7 +10,12 @@ import (
 func RevPrint(v string) string {
 	var s strings.Builder
 	s.Grow(len(v) + 4 + chLen(len(v)-1))
-	s.WriteString(CursorLeft(len(v) - 1))
+
+	if len(v) > 1 {
+		s.WriteString(CursorLeft(len(v) - 1))
+	} else {
+		s.WriteString(CursorLeft(1))
+	}
 	s.WriteString(v)
 	return s.String()
 }
