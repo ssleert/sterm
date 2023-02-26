@@ -3,7 +3,7 @@ module github.com/ssleert/sterm
 go 1.19
 
 require (
-	github.com/ssleert/sfolib v0.0.0-20230203143112-9ac4d7201928
+	github.com/ssleert/sfolib v0.0.0-20230216145343-aaa0c738e5c0
 	golang.org/x/term v0.5.0
 )
 
