@@ -6,7 +6,7 @@ import (
 )
 
 // a simple function for easy formatting of the escape sequence
-func escape(f string, args ...any) string {
+func escape(f string, args ...interface{}) string {
 	return fmt.Sprintf(
 		"%s%s",
 		Esc,
